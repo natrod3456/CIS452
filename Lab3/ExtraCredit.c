@@ -27,8 +27,11 @@ int main()
     else if (!pid){
 	    //child 1 process
 	    while(1){
+		srand(getpid()+ time(0));    
 		int num = rand() %5 + 1;
 		int num2 = rand() %2 + 1;
+//		printf("%d%d", num, num2);
+	
 		sleep(num);
 		if(num2 == 1){
 			raise(SIGUSR1);
@@ -45,8 +48,10 @@ int main()
 	    if(!pid2){
 	    //child 2 process
 		while(1){
+			srand(getpid()+ time(0));
 			int number = rand() %5 + 1;
 			int number2 = rand() %2 + 1;
+		
 			sleep(number);
 			if(number2 == 1){
 				raise(SIGUSR1);
