@@ -15,8 +15,14 @@ void sigHandlerUsr (int);
  *************************************************************************/
 int main() 
 {  
-   signal (SIGUSR1, sigHandlerUsr);
-   signal (SIGUSR2, sigHandlerUsr);
+  	struct sigaction sa;
+  	struct sigaction sa2;
+  	
+  	sa.sa_handler = sigHandlerUsr;
+  	sa2.sa_handler = sigHandler;
+	
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
     
     pid_t pid, pid2;
 
@@ -27,18 +33,17 @@ int main()
     else if (!pid){
 	    //child 1 process
 	    while(1){
-		srand(getpid()+ time(0));    
-		int num = rand() %5 + 1;
-		int num2 = rand() %2 + 1;
-//		printf("%d%d", num, num2);
+			srand(getpid()+ time(0));    
+			int num = rand() %5 + 1;
+			int num2 = rand() %2 + 1;
 	
-		sleep(num);
-		if(num2 == 1){
+			sleep(num);
+			if(num2 == 1){
 			raise(SIGUSR1);
-		}
-		else if (num2 == 2){
-			raise(SIGUSR2);
-		}
+			}
+			else if (num2 == 2){
+				raise(SIGUSR2);
+			}
 	    }
 	    exit(0);
     }
@@ -47,33 +52,29 @@ int main()
 	    pid2 = fork();
 	    if(!pid2){
 	    //child 2 process
-		while(1){
-			srand(getpid()+ time(0));
-			int number = rand() %5 + 1;
-			int number2 = rand() %2 + 1;
+			while(1){
+				srand(getpid()+ time(0));
+				int number = rand() %5 + 1;
+				int number2 = rand() %2 + 1;
 		
-			sleep(number);
-			if(number2 == 1){
-				raise(SIGUSR1);
-			}	
-			else if (number2 == 2){
-				raise(SIGUSR2);
-			}
+				sleep(number);
+				if(number2 == 1){
+					raise(SIGUSR1);
+				}	
+				else if (number2 == 2){
+					raise(SIGUSR2);
+				}
 	    	}	
 	    	exit(0);
 	    }
 	    else{
 		//parent process
-		printf("spawned child PID# %d\n", pid2);
-		struct sigaction sa;
-		struct sigaction sa2;
-		sa.sa_handler = sigHandlerUsr;
-		sa2.sa_handler = sigHandler;
+			printf("spawned child PID# %d\n", pid2);
 
 	    	while(1){
-			sigaction(SIGINT, &sa2, NULL);
-			sigaction(SIGUSR1, &sa, NULL);
-			sigaction(SIGUSR2, &sa, NULL);
+				sigaction(SIGINT, &sa2, NULL);
+				sigaction(SIGUSR1, &sa, NULL);
+				sigaction(SIGUSR2, &sa, NULL);
 	    	}
 	    }
     
