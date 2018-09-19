@@ -8,10 +8,13 @@
 
 void sigHandler (int);
 void sigHandlerUsr (int);
-
+/*************************************************************************
+ * A program that demonstrates the use of signals for simple communication.
+ * @author Natalie Rodriguez, Jake Geers
+ * @version Fall 2018
+ *************************************************************************/
 int main() 
-{ 
-    signal (SIGINT, sigHandler); 
+{  
     signal (SIGUSR1, sigHandlerUsr);
     signal (SIGUSR2, sigHandlerUsr);
     
@@ -22,7 +25,7 @@ int main()
     }
     else if (!pid){
 	    while(1){
-		int num = rand() %5;
+		int num = rand() %5 + 1;
 		int num2 = rand() %2 + 1;
 		sleep(num);
 		if(num2 == 1){
@@ -54,13 +57,11 @@ void sigHandler (int sigNum){
 }
 
 void sigHandlerUsr (int usrInterrupt){
+	puts("waiting...");
 	if( usrInterrupt == SIGUSR1){
-	printf("Received SIGUSR1 interrupt\n");
-	
+		printf("Received SIGUSR1 interrupt\n");
 	}
 	else if (usrInterrupt == SIGUSR2){
-	printf("received SIGUSR2 interrupt\n");
-	
+		printf("Received SIGUSR2 interrupt\n");
 	}
-
 }
