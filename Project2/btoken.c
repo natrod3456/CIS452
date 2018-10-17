@@ -72,23 +72,31 @@ int main(int argc, char **argv)
 			else if(pids[x] == 0){
 				read(fd[x-1][0], &token2, sizeof(struct Token));
 				printf("Child: %d  received message\n", x);
+                sleep(1);
 				if(token2.id == x){
 					printf("This is my message...printing message..\n");
+                    sleep(1);
 					printf("Message: %s\n", token2.message);
 					token2.id = 0;
 					strcpy(token2.message, "");
+                    sleep(1);
 					printf("Setting id to 0 and message to empty...\n");
+                    sleep(1);
 					write(fd[x][1], &token2, sizeof(struct Token));
 					printf("Child %d sending message\n", x);
+                    sleep(1);
 				}
 				else{
 					printf("This is not my message\n");
+                    sleep(1);
 					write(fd[x][1], &token2, sizeof(struct Token));
 					printf("Child %d sending message\n", x);
+                    sleep(1);
 				}
 
 				if(x == (numMachines - 1)){
-					printf("Finished message is: %s\n", buffer);
+					printf("Finished message is: %s\n", token2.message);
+                    sleep(1);
 					for(int y = 0; y < numMachines; y++){
 						close(fd[y][0]);
 						close(fd[y][1]);
